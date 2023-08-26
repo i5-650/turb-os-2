@@ -1,5 +1,7 @@
 use lazy_static::lazy_static;
 use spin::Mutex;
+use volatile::Volatile;
+
 use crate::drivers::vga::structs::*;
 
 lazy_static! {
@@ -40,15 +42,15 @@ impl VgaWriter {
 
 	fn clear_row(&mut self, row :usize){
 		for col in 0..BUFF_WIDTH {
-			self.buff.chars[row][col] = ScreenChar { ascii_char: b' ', color_code: self.color_code };
+			self.buff.chars[row][col].write(ScreenChar { ascii_char: b' ', color_code: self.color_code });
 		}
 	}
 
 	fn new_line(&mut self){
 		for row in 1..BUFF_HEIGHT {
 			for col in 0..BUFF_WIDTH {
-				let ch = self.buff.chars[row][col];
-				self.buff.chars[row - 1][col] = ch;
+				let ch = self.buff.chars[row][col].read();
+				self.buff.chars[row - 1][col].write(ch);
 			}
 		}
 
@@ -65,10 +67,10 @@ impl VgaWriter {
 					self.new_line();
 				}
 
-				self.buff.chars[BUFF_HEIGHT - 1][self.column] = ScreenChar {
+				self.buff.chars[BUFF_HEIGHT - 1][self.column].write(ScreenChar {
 					ascii_char: byte,
 					color_code: self.color_code
-				};
+				});
 				self.column += 1;
 			}
 
@@ -90,5 +92,5 @@ impl VgaWriter {
 
 #[repr(transparent)] // layout as its single field
 struct Buffer {
-	chars :[[ScreenChar; BUFF_WIDTH]; BUFF_HEIGHT]
+	chars :[[Volatile<ScreenChar>; BUFF_WIDTH]; BUFF_HEIGHT]
 }
