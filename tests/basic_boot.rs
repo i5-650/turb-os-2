@@ -24,3 +24,17 @@ fn panic(info: &PanicInfo) -> ! {
 fn test_println() {
 	println!("test_println output");
 }
+
+#[test_case]
+fn test_print(){
+	print!("test_print outpout");
+}
+
+#[test_case]
+fn test_print_format() {
+	let a = 12.3;
+	println!("test_print_format {}", a);
+}
+
+
+
