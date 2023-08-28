@@ -15,7 +15,6 @@ pub extern "C" fn _start() -> ! {
 }
 
 fn should_fail() {
-	println!("In should_fail");
 	turb_os_2::serial_print!("should_panic::should_fail...\t");
 	assert_eq!(0, 1);
 }
