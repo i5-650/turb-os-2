@@ -10,10 +10,14 @@ mod utils;
 
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
-	println!("Hello, 2+2={}", 2+2);
+	println!("Welcome on Turb-OS-2");
 
+	turb_os_2::init();
+	
 	#[cfg(test)]
 	test_main();
+
+	println!("you made it boy !");
 	
 	loop {}
 }
@@ -22,9 +26,4 @@ pub extern "C" fn _start() -> ! {
 #[panic_handler]
 fn panic(info: &core::panic::PanicInfo) -> ! {
 	turb_os_2::test_panic_handler(info)
-}
-
-#[test_case]
-fn trivial_assertion() {
-	assert_eq!(1, 1);
 }

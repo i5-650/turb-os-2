@@ -1,2 +1,2 @@
 #[cfg(not(test))]
-pub mod panic;
+pub mod panic_utils;
