@@ -2,11 +2,20 @@
 #![cfg_attr(test, no_main)]
 #![feature(custom_test_frameworks)]
 #![test_runner(crate::test_runner)]
+#![feature(abi_x86_interrupt)]
 #![reexport_test_harness_main = "test_main"]
 
 pub mod drivers;
+pub mod system;
 
 use core::panic::PanicInfo;
+
+use system::cpu::{idt, gdt};
+
+pub fn init(){
+	gdt::init();
+	idt::init_idt();
+}
 
 pub trait Testable {
 	fn run(&self) -> ();
@@ -58,6 +67,7 @@ pub fn test_runner(tests: &[&dyn Testable]) {
 #[cfg(test)]
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
+	init();
 	test_main();
 	loop {}
 }

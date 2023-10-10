@@ -35,6 +35,3 @@ fn test_print_format() {
 	let a = 12.3;
 	println!("test_print_format {}", a);
 }
-
-
-
