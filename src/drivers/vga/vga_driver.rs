@@ -80,7 +80,8 @@ impl VgaWriter {
 	pub fn write_str(&mut self, stri: &str){
 		for byte in stri.bytes() {
 			match byte {
-				// 0x20 = space and 1st printable char, 0x7e = 126, before last char in ascii table
+				// 0x20 = space aka 1st printable char 
+				// 0x7e = 126 aka before last char in ascii table
 				0x20..=0x7e | NEW_LINE => self.write_byte(byte),
 				_ => self.write_byte(0xfe)	// white block
 			}

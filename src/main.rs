@@ -4,6 +4,8 @@
 #![test_runner(turb_os_2::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
+use turb_os_2::hlt_loop;
+
 mod drivers;
 mod utils;
 
@@ -19,7 +21,7 @@ pub extern "C" fn _start() -> ! {
 
 	println!("you made it boy !");
 	
-	loop {}
+	hlt_loop();
 }
 
 #[cfg(test)]

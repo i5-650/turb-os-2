@@ -3,9 +3,13 @@ use crate::drivers::serial::serial_driver::UART;
 #[doc(hidden)]
 pub fn _print(args: ::core::fmt::Arguments) {
 	use core::fmt::Write;
-	UART.lock()
-		.write_fmt(args)
-		.expect("Printing to serial failed");
+	use x86_64::instructions::interrupts;
+
+	interrupts::without_interrupts(||{
+		UART.lock()
+			.write_fmt(args)
+			.expect("Printing to serial failed");
+	});
 }
 
 #[macro_export]

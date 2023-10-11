@@ -9,8 +9,9 @@ pub mod drivers;
 pub mod system;
 
 use core::panic::PanicInfo;
-
 use system::cpu::{idt, gdt, pic};
+
+static IOBASE :u16 = 0xf4;
 
 pub fn init(){
 	gdt::init();
@@ -18,6 +19,30 @@ pub fn init(){
 	unsafe { pic::PICS.lock().initialize() };
 	x86_64::instructions::interrupts::enable();
 }
+
+
+pub fn hlt_loop() -> ! {
+	loop {
+	    x86_64::instructions::hlt();
+	}
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[repr(u32)]
+pub enum QemuExitCode {
+	Success = 0x10,
+	Failed = 0x11,
+}
+
+pub fn exit_qemu(exit_code: QemuExitCode) {
+	use x86_64::instructions::port::Port;
+
+	unsafe {
+		let mut port = Port::new(IOBASE);
+		port.write(exit_code as u32);
+	}
+}
+
 
 pub trait Testable {
 	fn run(&self) -> ();
@@ -31,31 +56,11 @@ impl <T> Testable for T where T: Fn() {
 	}
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[repr(u32)]
-#[allow(dead_code)]
-pub enum QemuExitCode {
-	Success = 0x10,
-	Failed = 0x11,
-}
-
-static IOBASE :u16 = 0xf4;
-
-pub fn exit_qemu(exit_code: QemuExitCode) {
-	use x86_64::instructions::port::Port;
-
-	unsafe {
-		let mut port = Port::new(IOBASE);
-		port.write(exit_code as u32);
-	}
-}
-
-
 pub fn test_panic_handler(info: &PanicInfo) -> ! {
 	serial_println!("[failed]\n");
 	serial_println!("Error: {}\n", info);
 	exit_qemu(QemuExitCode::Failed);
-	loop {}
+	hlt_loop();
 }
 
 pub fn test_runner(tests: &[&dyn Testable]) {
@@ -71,7 +76,7 @@ pub fn test_runner(tests: &[&dyn Testable]) {
 pub extern "C" fn _start() -> ! {
 	init();
 	test_main();
-	loop {}
+	hlt_loop();
 }
 
 #[cfg(test)]
