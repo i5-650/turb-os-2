@@ -10,11 +10,13 @@ pub mod system;
 
 use core::panic::PanicInfo;
 
-use system::cpu::{idt, gdt};
+use system::cpu::{idt, gdt, pic};
 
 pub fn init(){
 	gdt::init();
-	idt::init_idt();
+	idt::init();
+	unsafe { pic::PICS.lock().initialize() };
+	x86_64::instructions::interrupts::enable();
 }
 
 pub trait Testable {
