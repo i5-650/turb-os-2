@@ -9,23 +9,23 @@ use turb_os_2::hlt_loop;
 mod drivers;
 mod utils;
 
-
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
-	println!("Welcome on Turb-OS-2");
+    println!("Welcome on Turb-OS-2");
 
-	turb_os_2::init();
-	
-	#[cfg(test)]
-	test_main();
+    turb_os_2::init();
 
-	println!("you made it boy !");
-	
-	hlt_loop();
+    #[cfg(test)]
+    test_main();
+
+    println!("you made it boy !");
+
+    hlt_loop();
 }
 
 #[cfg(test)]
 #[panic_handler]
 fn panic(info: &core::panic::PanicInfo) -> ! {
-	turb_os_2::test_panic_handler(info)
+    turb_os_2::test_panic_handler(info)
 }
+

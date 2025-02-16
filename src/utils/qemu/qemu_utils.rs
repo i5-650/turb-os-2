@@ -1,20 +1,20 @@
-
-static IOBASE :u16 = 0xf4;
+static IOBASE: u16 = 0xf4;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(u32)]
 #[allow(dead_code)]
 pub enum QemuExitCode {
-	Success = 0x10,
-	Failed = 0x11,
+    Success = 0x10,
+    Failed = 0x11,
 }
 
 #[allow(dead_code)]
 pub fn exit_qemu(exit_code: QemuExitCode) {
-	use x86_64::instructions::port::Port;
+    use x86_64::instructions::port::Port;
 
-	unsafe {
-		let mut port = Port::new(IOBASE);
-		port.write(exit_code as u32);
-	}
+    unsafe {
+        let mut port = Port::new(IOBASE);
+        port.write(exit_code as u32);
+    }
 }
+

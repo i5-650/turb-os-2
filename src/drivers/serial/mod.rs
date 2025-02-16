@@ -1,2 +1,3 @@
-pub mod serial_driver;
 pub mod macros;
+pub mod serial_driver;
+

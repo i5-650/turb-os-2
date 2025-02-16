@@ -1,8 +1,9 @@
-use core::panic::PanicInfo;
 use crate::println;
+use core::panic::PanicInfo;
 
 #[panic_handler]
-fn panic(_info: &PanicInfo) -> ! { // ! = "never" type
-	println!("{}", _info);
-	loop {}
+fn panic(info: &PanicInfo) -> ! {
+    // ! = "never" type
+    println!("{info}");
+    loop {}
 }
