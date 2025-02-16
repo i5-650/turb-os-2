@@ -11,4 +11,3 @@ lazy_static! {
         Mutex::new(serial_port)
     };
 }
-

@@ -28,4 +28,3 @@ pub extern "C" fn _start() -> ! {
 fn panic(info: &core::panic::PanicInfo) -> ! {
     turb_os_2::test_panic_handler(info)
 }
-

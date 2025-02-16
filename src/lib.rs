@@ -85,4 +85,3 @@ pub extern "C" fn _start() -> ! {
 fn panic(info: &PanicInfo) -> ! {
     test_panic_handler(info)
 }
-

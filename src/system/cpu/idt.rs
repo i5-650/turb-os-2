@@ -105,4 +105,3 @@ extern "x86-interrupt" fn keyboard_interrupt_handler(_stack_frame: InterruptStac
 fn breakpoint_exception_test() {
     x86_64::instructions::interrupts::int3();
 }
-

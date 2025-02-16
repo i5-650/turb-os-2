@@ -93,4 +93,3 @@ impl VgaWriter {
 struct Buffer {
     chars: [[Volatile<ScreenChar>; BUFF_WIDTH]; BUFF_HEIGHT],
 }
-

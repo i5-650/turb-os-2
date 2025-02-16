@@ -24,4 +24,3 @@ pub const BUFF_HEIGHT: usize = 25;
 pub const BUFF_WIDTH: usize = 80;
 pub const NEW_LINE: u8 = b'\n';
 pub const VGA_BUFF_ADDR: u32 = 0xb8000;
-
